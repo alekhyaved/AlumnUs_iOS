@@ -20,6 +20,19 @@ class ViewController: UIViewController {
         setUpElements()
         
     }
+    
+  /*  override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        if Auth.auth().currentUser != nil {
+            self.performSegue(withIdentifier: "toHomeScreen", sender: self)
+        }
+    }*/
 
     func setUpElements(){
         Utilities.styleFilledButton(signUpButton)

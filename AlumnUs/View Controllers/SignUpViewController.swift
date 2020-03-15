@@ -10,7 +10,7 @@ import UIKit
 import FirebaseAuth
 import Firebase
 
-class SignUpViewController: UIViewController {
+class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
     @IBOutlet weak var sjsuIDTextField: UITextField!
@@ -20,6 +20,10 @@ class SignUpViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var signUpButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
+    @IBOutlet weak var profileImageView: UIImageView!
+    @IBOutlet weak var tapTochangeProfile: UIButton!
+    
+     let imagePicker = UIImagePickerController()
     
     
     override func viewDidLoad() {
@@ -27,6 +31,8 @@ class SignUpViewController: UIViewController {
 
         // Do any additional setup after loading the view.
          setUpElements()
+        
+        imagePicker.delegate = self
     }
     
     func setUpElements(){
@@ -78,6 +84,7 @@ class SignUpViewController: UIViewController {
             let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let pass = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+            guard let profileImage = profileImageView.image else { return }
         //User creation
             Auth.auth().createUser(withEmail: email, password: pass) { (result, err) in
                 if err != nil{
@@ -91,11 +98,74 @@ class SignUpViewController: UIViewController {
                         }
                     }
                     
+                    // 1. Upload the profile image to Firebase Storage
+                    self.uploadProfileImage(profileImage) { url in
+                        if url != nil {
+                            let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
+                            changeRequest?.photoURL = url
+                            
+                            changeRequest?.commitChanges { error in
+                                if error == nil {
+                                    
+                                    self.saveProfile(profileImageURL: url!) { success in
+                                        if success {
+                                            self.dismiss(animated: true, completion: nil)
+                                        }
+                                    }
+                                    
+                                } else {
+                                    print("Error: \(error!.localizedDescription)")
+                                }
+                            }
+                        } else {
+                            // Error unable to upload profile image
+                        }
+                        
+                    }
+                    
                      //move to home screen
                     self.moveToHome()
                     
                 }
             }
+        }
+    }
+    
+    
+    func uploadProfileImage(_ image:UIImage, completion: @escaping ((_ url:URL?)->())) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let storageRef = Storage.storage().reference().child("user/\(uid)")
+        
+       guard let imageData = image.jpegData(compressionQuality: 0.75) else { return }
+        
+        
+        let metaData = StorageMetadata()
+        metaData.contentType = "image/jpg"
+        
+        storageRef.putData(imageData, metadata: metaData) { metaData, error in
+            if error == nil, metaData != nil {
+
+            storageRef.downloadURL { url, error in
+                completion(url)
+                // success!
+                }
+            } else {
+                // failed
+                completion(nil)
+            }
+        }
+    }
+    
+    func saveProfile(profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+        let databaseRef = Database.database().reference().child("users/profile/\(uid)")
+        
+        let userObject = [
+            "photoURL": profileImageURL.absoluteString
+        ] as [String:Any]
+        
+        databaseRef.setValue(userObject) { error, ref in
+            completion(error == nil)
         }
     }
     
@@ -112,5 +182,27 @@ class SignUpViewController: UIViewController {
         view.window?.makeKeyAndVisible()
     }
     
+    
+    @IBAction func tapToChangeTapped(_ sender: Any) {
+        imagePicker.allowsEditing = true
+        imagePicker.sourceType = .photoLibrary
+            
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+            profileImageView.contentMode = .scaleAspectFit
+            profileImageView.image = pickedImage
+        }
+     
+        dismiss(animated: true, completion: nil)
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil)
+    }
 
+    
 }
+
