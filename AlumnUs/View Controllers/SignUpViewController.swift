@@ -91,6 +91,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     self.showError("Error occurred while cretaing a new user account")
                 }
                 else {
+                    // load user data into Firebase Database
                     let db = Firestore.firestore()
                     db.collection("users").addDocument(data: ["SJSUID" : sjsuid, "firstname": firstName, "lastname": lastName, "uid": result!.user.uid]) { (error) in
                         if error != nil{
@@ -98,7 +99,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                         }
                     }
                     
-                    // 1. Upload the profile image to Firebase Storage
+                    // Upload the profile image to Firebase Storage and Real-time database
                     self.uploadProfileImage(profileImage) { url in
                         if url != nil {
                                self.saveProfile(profileImageURL: url!) { success in
@@ -120,7 +121,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
     }
     
-    
+    //upload profile image to Firebase Storage
     func uploadProfileImage(_ image:UIImage, completion: @escaping ((_ url:URL?)->())) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let storageRef = Storage.storage().reference().child("user/\(uid)")
@@ -145,6 +146,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
     }
     
+    // Load profile image data into Firebase Database
     func saveProfile(profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let databaseRef = Database.database().reference().child("users/profile/\(uid)")

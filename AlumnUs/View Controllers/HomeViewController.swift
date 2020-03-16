@@ -19,14 +19,17 @@ class HomeViewController: UIViewController {
     }
      
     @IBAction func logOutTapped(_ sender: Any) {
-        try! Auth.auth().signOut()
-       // self.performSegue(withIdentifier: "logOutSegue", sender: self)
-            let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
-            as? ViewController
-            
-            view.window?.rootViewController = mainViewC
-            view.window?.makeKeyAndVisible()
-        }
+        
+         try! Auth.auth().signOut()
+        // self.performSegue(withIdentifier: "logOutSegue", sender: self)
+        let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
+        as? ViewController
+        
+        view.window?.rootViewController = mainViewC
+        view.window?.makeKeyAndVisible()
+    }
+       
+        
     }
 
 
