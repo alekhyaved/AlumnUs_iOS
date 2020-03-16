@@ -101,21 +101,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // 1. Upload the profile image to Firebase Storage
                     self.uploadProfileImage(profileImage) { url in
                         if url != nil {
-                            let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                            changeRequest?.photoURL = url
-                            
-                            changeRequest?.commitChanges { error in
-                                if error == nil {
-                                    
-                                    self.saveProfile(profileImageURL: url!) { success in
-                                        if success {
-                                            self.dismiss(animated: true, completion: nil)
-                                        }
-                                    }
-                                    
-                                } else {
-                                    print("Error: \(error!.localizedDescription)")
-                                }
+                               self.saveProfile(profileImageURL: url!) { success in
+                              if success {
+                                    self.dismiss(animated: true, completion: nil)
+                                  }
                             }
                         } else {
                             // Error unable to upload profile image
