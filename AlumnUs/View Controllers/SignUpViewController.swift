@@ -22,6 +22,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var tapTochangeProfile: UIButton!
+    @IBOutlet weak var haveAnAccountLabel: UILabel!
+    @IBOutlet weak var loginButton: UIButton!
     
      let imagePicker = UIImagePickerController()
     
@@ -44,6 +46,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         Utilities.styleTextField(emailTextField)
         Utilities.styleTextField(passwordTextField)
         Utilities.styleFilledButton(signUpButton)
+        Utilities.styleHollowButtonLogin(loginButton)
     }
     
     
@@ -68,7 +71,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         return nil
     }
     
-
+    @IBAction func loginTapped(_ sender: Any) {
+        
+           // self.dismiss(animated: false, completion: nil)
+        let controller = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.loginViewController)
+        self.view.window?.rootViewController = controller
+        self.view.window?.makeKeyAndVisible()
+        
+    }
+    
     @IBAction func signUpTapped(_ sender: Any) {
         // fields validation
         let error = validateFields()
@@ -166,10 +177,10 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     func moveToHome(){
-       let homeViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeviewController)
-        as? HomeViewController
+        let controller =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainTabBarController)
+        as? UITabBarController
         
-        view.window?.rootViewController = homeViewC
+        view.window?.rootViewController = controller
         view.window?.makeKeyAndVisible()
     }
     

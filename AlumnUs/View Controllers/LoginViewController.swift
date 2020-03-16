@@ -15,7 +15,7 @@ class LoginViewController: UIViewController {
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var loginButton: UIButton!
     @IBOutlet weak var errorLabel: UILabel!
-    
+    @IBOutlet weak var createAccountButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,14 +47,24 @@ class LoginViewController: UIViewController {
                 self.errorLabel.alpha = 1
             }
             else{
-                let homeViewC = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeviewController) as? HomeViewController
                 
-                self.view.window?.rootViewController = homeViewC
+                let controller = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainTabBarController) as? UITabBarController
+                
+                self.view.window?.rootViewController = controller
                 self.view.window?.makeKeyAndVisible()
                 
                 
             }
         }
     }
+    
+    @IBAction func createAccountTapped(_ sender: Any) {
+        
+        let controller = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.signUpViewController)
+        self.view.window?.rootViewController = controller
+        self.view.window?.makeKeyAndVisible()
+        
+    }
+    
     
 }

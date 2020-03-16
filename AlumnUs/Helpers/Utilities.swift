@@ -39,6 +39,13 @@ class Utilities : UIViewController {
         button.tintColor = UIColor.black
     }
     
+    static func styleHollowButtonLogin(_ button:UIButton){
+        button.layer.borderWidth = 0.5
+        button.layer.borderColor = UIColor.blue.cgColor
+        button.layer.cornerRadius = 20.0
+        button.tintColor = UIColor.blue
+    }
+    
     static func isPasswordValid(_ password: String) -> Bool {
         let pass = NSPredicate(format: "SELF MATCHES %@", "^(?=.*[a-z])(?=.*[$@$!%*?&])([A-Za-z\\d$@$#!%*?&]){8,}")
         return pass.evaluate(with: password)
