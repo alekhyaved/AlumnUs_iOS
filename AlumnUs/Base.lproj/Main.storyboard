@@ -309,10 +309,16 @@
                         <viewLayoutGuide key="safeArea" id="mwn-Za-fth"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="yOo-hT-Cvm"/>
-                    <navigationItem key="navigationItem" id="q8F-k5-3ys">
-                        <barButtonItem key="rightBarButtonItem" title="Log Out" id="JcH-UH-Unm">
+                    <navigationItem key="navigationItem" title="Home" id="q8F-k5-3ys" userLabel="Home">
+                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="JcH-UH-Unm">
                             <connections>
                                 <action selector="logOutTapped:" destination="NmQ-UN-mv8" id="ksu-v6-pHY"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" image="plus.circle.fill" catalog="system" id="Uit-uR-KGX" userLabel="Add">
+                            <color key="tintColor" red="0.4202545097" green="0.69573682550000004" blue="0.50448033930000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <segue destination="GlP-Vx-UPX" kind="presentation" id="vzd-fA-g91"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -323,6 +329,80 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJS-QK-rru" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4509" y="-90"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="H13-fg-eB6">
+            <objects>
+                <navigationController id="GlP-Vx-UPX" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="QKl-QH-gsL"/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="T4b-cE-7MA">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="X9h-e6-2T5" kind="relationship" relationship="rootViewController" id="T8q-ru-ZPG"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="sdt-m4-RGR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="5386" y="-96"/>
+        </scene>
+        <!--NewPostViewController-->
+        <scene sceneID="zG5-lg-9e4">
+            <objects>
+                <viewController storyboardIdentifier="NewPostViewController" title="NewPostViewController" id="X9h-e6-2T5" customClass="NewPostViewController" customModule="AlumnUs" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9J8-2t-iZw">
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XOY-jC-4Xa">
+                                <rect key="frame" x="12" y="68" width="390" height="752"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's Happening?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJt-wW-prJ" userLabel="Place Holder Label">
+                                <rect key="frame" x="20" y="77" width="321" height="32.5"/>
+                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="27"/>
+                                <color key="textColor" red="0.57380741830000004" green="0.56553578380000002" blue="0.0" alpha="0.40908604452054792" colorSpace="custom" customColorSpace="sRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                        <constraints>
+                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="12" id="Byc-dd-Dpp"/>
+                            <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="xJt-wW-prJ" secondAttribute="trailing" constant="73" id="Hek-Q3-aIw"/>
+                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" constant="12" id="ITx-hd-86C"/>
+                            <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="XOY-jC-4Xa" secondAttribute="trailing" constant="12" id="Y8X-ds-TXh"/>
+                            <constraint firstItem="xJt-wW-prJ" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" constant="21" id="l0J-vE-I4Q"/>
+                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="bottom" secondItem="Unp-pz-oib" secondAttribute="bottom" constant="12" id="p32-Dc-XzO"/>
+                            <constraint firstItem="xJt-wW-prJ" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="20" id="rEj-Y2-d7Y"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Unp-pz-oib"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="SSB-qf-HbH">
+                        <barButtonItem key="leftBarButtonItem" image="delete.left" catalog="system" id="lJJ-eP-YqQ" userLabel="Cancel Button">
+                            <connections>
+                                <action selector="cancelTapped:" destination="X9h-e6-2T5" id="HKj-9E-Ou6"/>
+                            </connections>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Post" id="g8g-6d-eS0">
+                            <connections>
+                                <action selector="postButtonTapped:" destination="X9h-e6-2T5" id="keS-Z8-alT"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
+                    <connections>
+                        <outlet property="cancelButton" destination="lJJ-eP-YqQ" id="lQx-yM-ALr"/>
+                        <outlet property="placeHolderLabel" destination="xJt-wW-prJ" id="VCx-j7-bGN"/>
+                        <outlet property="postButton" destination="g8g-6d-eS0" id="ubb-cg-aWM"/>
+                        <outlet property="textArea" destination="XOY-jC-4Xa" id="bPj-kJ-zap"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="zjP-sO-d5d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="6186.9565217391309" y="-96.428571428571431"/>
         </scene>
         <!--Item-->
         <scene sceneID="bVF-nu-BDH">
@@ -363,6 +443,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="delete.left" catalog="system" width="64" height="52"/>
+        <image name="plus.circle.fill" catalog="system" width="64" height="60"/>
         <image name="usericon" width="50" height="50"/>
     </resources>
 </document>

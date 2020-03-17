@@ -24,11 +24,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             
             if user != nil {
+                UserService.fethcUserData(user!.uid) { userProfile in
+                    UserService.currentUserProfile = userProfile}
                 //
                 let controller = storyboard.instantiateViewController(withIdentifier: "MainTabBarController") as! UITabBarController
                 self.window?.rootViewController = controller
                 self.window?.makeKeyAndVisible()
             } else {
+                
+                UserService.currentUserProfile = nil
                 // menu screen
                // let controller = storyboard.instantiateViewController(withIdentifier: "MainVC") as! ViewController
                 let controller =  storyboard.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
