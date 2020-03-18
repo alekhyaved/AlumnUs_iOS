@@ -113,7 +113,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     // Upload the profile image to Firebase Storage and Real-time database
                     self.uploadProfileImage(profileImage) { url in
                         if url != nil {
-                               self.saveProfile(profileImageURL: url!) { success in
+                            
+                            self.saveProfile(firstName: firstName, lastName: lastName,  profileImageURL: url!) { success in
                               if success {
                                     self.dismiss(animated: true, completion: nil)
                                   }
@@ -158,11 +159,12 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     }
     
     // Load profile image data into Firebase Database
-    func saveProfile(profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
+    func saveProfile(firstName: String, lastName: String, profileImageURL:URL, completion: @escaping ((_ success:Bool)->())) {
         guard let uid = Auth.auth().currentUser?.uid else { return }
         let databaseRef = Database.database().reference().child("users/profile/\(uid)")
         
         let userObject = [
+            "username": firstName + " " + lastName,
             "photoURL": profileImageURL.absoluteString
         ] as [String:Any]
         

@@ -21,9 +21,10 @@ class UserService  {
             var userProfile: UserProfile?
             
             if let userDict = snapshot.value as? [String: Any],
+             let username = userDict["username"] as? String,
              let photoURL = userDict["photoURL"] as? String,
                 let url = URL(string: photoURL){
-                userProfile = UserProfile(uid: snapshot.key, photoURL: url)
+                userProfile = UserProfile(uid: snapshot.key, username: username,  photoURL: url)
             }
             completion(userProfile)
         })
