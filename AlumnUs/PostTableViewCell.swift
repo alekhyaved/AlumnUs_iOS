@@ -31,6 +31,11 @@ class PostTableViewCell: UITableViewCell {
     }
     
     func set(post:Post) {
+        
+        imageService.getImage (withURL: post.author.photoURL){image in
+            self.profileImageView.image = image
+        }
+        
         usernameLabel.text = post.author.username
         postTextLabel.text = post.text
     }

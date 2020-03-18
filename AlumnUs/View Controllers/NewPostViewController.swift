@@ -46,11 +46,12 @@ class NewPostViewController: UIViewController, UITextViewDelegate {
         
         let postObject = [
             "author": [
-                "uid" : userProfile.uid,
+                "uid": userProfile.uid,
                 "username": userProfile.username,
                 "photoURL": userProfile.photoURL.absoluteString
             ],
-            "text" : textArea?.text as Any,
+            
+            "text" : textArea.text!,
             "timestamp" : [".sv":"timestamp"]
         ] as [String: Any]
         
