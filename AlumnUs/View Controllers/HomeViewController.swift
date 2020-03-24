@@ -27,6 +27,9 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
     var tableView:UITableView!
        
        var posts = [Post]()
+        var moreFetching = false
+        var reachedEnd = false
+    let leadingScreenForBatchhing:CGFloat = 3.0
        
        override func viewDidLoad() {
            super.viewDidLoad()
@@ -56,38 +59,55 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
            tableView.dataSource = self
            tableView.reloadData()
            
-           observePosts()
+           //observePosts()
+            beginBatchFetch()
            
        }
        
-       func observePosts() {
+    func fetchPosts(completion: @escaping(_ posts: [Post])->()) {
            let postsRef = Database.database().reference().child("posts")
+        
+        let lastPost = self.posts.last
+        var queryRef: DatabaseQuery
+        if lastPost == nil{
+                queryRef = postsRef.queryOrdered(byChild: "timestamp").queryLimited(toLast: 20)
+        }
+        else{
+            let lastTimeStamp = lastPost!.createdAt.timeIntervalSince1970 * 1000
+            queryRef = postsRef.queryOrdered(byChild: "timestamp").queryEnding(atValue: lastTimeStamp).queryLimited(toLast: 20)
+        }
            
-           postsRef.observe(.value, with: { snapshot in
-               
-               var tempPosts = [Post]()
-               
-               for child in snapshot.children {
-                   if let childSnapshot = child as? DataSnapshot,
-                       let dict = childSnapshot.value as? [String:Any],
-                       let author = dict["author"] as? [String:Any],
-                       let uid = author["uid"] as? String,
-                       let username = author["username"] as? String,
-                       let photoURL = author["photoURL"] as? String,
-                       let url = URL(string:photoURL),
-                       let text = dict["text"] as? String,
-                       let timestamp = dict["timestamp"] as? Double {
-                       
-                       let userProfile = UserProfile(uid: uid, username: username, photoURL: url)
-                       let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp)
-                       tempPosts.append(post)
-                   }
-               }
-               
-               self.posts = tempPosts
-               self.tableView.reloadData()
-               
-           })
+        queryRef.observeSingleEvent(of: .value, with: { snapshot in
+            
+            var tempPosts = [Post]()
+            
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot,
+                    let dict = childSnapshot.value as? [String:Any],
+                    let author = dict["author"] as? [String:Any],
+                    let uid = author["uid"] as? String,
+                    let username = author["username"] as? String,
+                    let photoURL = author["photoURL"] as? String,
+                    let url = URL(string:photoURL),
+                    let text = dict["text"] as? String,
+                    let timestamp = dict["timestamp"] as? Double {
+                    
+                    if childSnapshot.key != lastPost?.id {
+                        let userProfile = UserProfile(uid: uid, username: username, photoURL: url)
+                        let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp)
+                                        tempPosts.insert(post, at: 0)
+                    }
+                    
+                   
+                }
+            }
+            
+            return completion(tempPosts)
+            //self.posts = tempPosts
+            //self.tableView.reloadData()
+            
+        })
+
        }
        
        func numberOfSections(in tableView: UITableView) -> Int {
@@ -103,4 +123,26 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
            cell.set(post: posts[indexPath.row])
            return cell
        }
+    
+    func viewDidScroll(_ scrollView: UIScrollView){
+        let offSetY = scrollView.contentOffset.y
+        let contentHeight = scrollView.contentSize.height
+        
+        if offSetY > contentHeight - scrollView.frame.size.height * leadingScreenForBatchhing {
+            if !moreFetching && !reachedEnd {
+                beginBatchFetch()
+                }
+            }
+        }
+    
+    func beginBatchFetch(){
+        moreFetching = true
+        fetchPosts{ newPosts in
+            self.posts.append(contentsOf: newPosts)
+            self.reachedEnd = newPosts.count == 0
+            self.moreFetching = false
+            self.tableView.reloadData()
+        }
+        
+    }
 }
