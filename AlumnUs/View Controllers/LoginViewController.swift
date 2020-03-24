@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class LoginViewController: UIViewController {
     
@@ -34,6 +35,11 @@ class LoginViewController: UIViewController {
         passwordTextField.isSecureTextEntry = true
         
     }
+    
+    
+    private var authUser : User? {
+        return Auth.auth().currentUser
+    }
 
     
     @IBAction func loginTapped(_ sender: Any) {
@@ -41,22 +47,34 @@ class LoginViewController: UIViewController {
         let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         let pass = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         
-        Auth.auth().signIn(withEmail: email, password: pass) { (result, error) in
+        Auth.auth().signIn(withEmail: email, password: pass, completion: {user, error in
             if error != nil{
                 self.errorLabel.text = error!.localizedDescription
                 self.errorLabel.alpha = 1
             }
             else{
+                if self.authUser != nil && !self.authUser!.isEmailVerified {
+                // User is available, but their email is not verified.
+                    let alertController = UIAlertController(title: "Email not Verified", message: "Please verify your email by clicking on the link sent on your registered EmailID.", preferredStyle: .alert)
+                    let action = UIAlertAction(title: "Ok", style: .default)
+                    
+                    alertController.addAction(action)
+                    
+                    self.present(alertController, animated: true, completion: nil)
                 
-                let controller = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainTabBarController) as? UITabBarController
-                
-                self.view.window?.rootViewController = controller
-                self.view.window?.makeKeyAndVisible()
-                
-                
-            }
+                }
+                else{
+                    let controller = self.storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainTabBarController) as? UITabBarController
+                                   
+                                   self.view.window?.rootViewController = controller
+                                   self.view.window?.makeKeyAndVisible()
+                                   
+                                   
+                    }
+                }
+            })
+            
         }
-    }
     
     @IBAction func createAccountTapped(_ sender: Any) {
         
@@ -65,6 +83,5 @@ class LoginViewController: UIViewController {
         self.view.window?.makeKeyAndVisible()
         
     }
-    
     
 }

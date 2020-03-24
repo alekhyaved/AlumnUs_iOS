@@ -51,6 +51,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     
     
     func validateFields() -> String?{
+        
         if sjsuIDTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
@@ -60,13 +61,15 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             return "Please fill in all fields!!"
         }
         
-        // password validation
+        let emailID = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+               if Utilities.isEmailValid(emailID) == false{
+                   return "Only students of SJSU are allowed to signup with valid EmailID."
+               }
         
         let pass = passwordTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
         if Utilities.isPasswordValid(pass) == false {
             return "Password must be of 8 characters, should conatin a special character and a number."
         }
-        
         
         return nil
     }
@@ -80,6 +83,34 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         
     }
     
+    private var authUser : User? {
+        return Auth.auth().currentUser
+    }
+
+    public func sendVerificationMail() {
+        if self.authUser != nil && !self.authUser!.isEmailVerified {
+            self.authUser!.sendEmailVerification(completion: { (error) in
+                // Notify the user that the mail has sent or couldn't because of an error.
+                if error != nil{
+                    print("error occured: invalid email Id")
+                }
+                else{
+                  /*  let alertController = UIAlertController(title: "Email Verification Required", message: "Please verify your account through the link sent on your registered EmailId", preferredStyle: .actionSheet)
+                    let alertAction = UIAlertAction(title: "Ok", style: .default)
+                 
+                 alertController.addAction(alertAction)
+                 self.present(alertController, animated: true, completion: nil)*/
+                    print("Verification email sent")
+                }
+            })
+        }
+        else {
+            // Either the user is not available, or the user is already verified.
+            print("Email verified/User not available")
+        }
+    }
+    
+    
     @IBAction func signUpTapped(_ sender: Any) {
         // fields validation
         let error = validateFields()
@@ -88,7 +119,11 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         }
         else
         {
-            
+            //send email for verification
+            self.sendVerificationMail()
+            self.errorLabel.text = "Please verify your account through the link sent on your registered EmailId"
+            self.errorLabel.alpha = 1
+            self.errorLabel.textColor = UIColor.brown
         // remove whitespaces from text
             let sjsuid = sjsuIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -102,6 +137,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     self.showError("Error occurred while cretaing a new user account")
                 }
                 else {
+                    
+                    
                     // load user data into Firebase Database
                     let db = Firestore.firestore()
                     db.collection("users").addDocument(data: ["SJSUID" : sjsuid, "firstname": firstName, "lastname": lastName, "uid": result!.user.uid]) { (error) in
@@ -126,7 +163,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     }
                     
                      //move to home screen
-                    self.moveToHome()
+                    //self.moveToHome()
                     
                 }
             }
@@ -178,8 +215,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
         errorLabel.alpha = 1
     }
     
-    func moveToHome(){
-        let controller =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainTabBarController)
+    func moveToMainVC(){
+        let controller =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
         as? UITabBarController
         
         view.window?.rootViewController = controller
