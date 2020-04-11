@@ -12,8 +12,11 @@ import Firebase
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     @IBOutlet weak var logOutButton: UIBarButtonItem!
+//@IBOutlet weak var messageButton: UIBarButtonItem!
     
-      
+    @IBOutlet weak var Message: UIBarButtonItem!
+    //    @IBOutlet weak var MessageButton: UITabBarItem!
+    
     @IBAction func logOutTapped(_ sender: Any) {
         try! Auth.auth().signOut()
                // self.performSegue(withIdentifier: "logOutSegue", sender: self)
@@ -23,6 +26,25 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                view.window?.rootViewController = mainViewC
                view.window?.makeKeyAndVisible()
     }
+    
+//    
+  
+//    @IBAction func MessageTapped(_ sender: Any) {
+//    
+//        print("you tapped message button, insert functionality here")
+////        let uid = Auth.auth().currentUser?.uid
+////        print ("uid", uid!)
+////        Database.database().reference().child("users").child(uid!).observeSingleEvent(of: .value, with: { (snapshot) in
+////
+////            print (snapshot)
+////            if let dictionary = snapshot.value as? [String:AnyObject]{
+////                self.navigationItem.title = dictionary["username"] as? String
+////            }
+////        }, withCancel: nil)
+//    
+//    }
+    
+    
     
     var tableView:UITableView!
        
@@ -80,7 +102,6 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         queryRef.observeSingleEvent(of: .value, with: { snapshot in
             
             var tempPosts = [Post]()
-            
             for child in snapshot.children {
                 if let childSnapshot = child as? DataSnapshot,
                     let dict = childSnapshot.value as? [String:Any],
