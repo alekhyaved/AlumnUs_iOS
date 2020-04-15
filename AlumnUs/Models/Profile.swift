@@ -11,10 +11,17 @@ import Foundation
 class Profile{
     var username: String
     var photoURL: URL
+    var id: String
+
+ 
     
-    init(username: String, photoURL: URL) {
+    init(username: String, photoURL: URL, id : String) {
         self.username = username
         self.photoURL = photoURL
+        self.id = id
+   
+    
+   
     }
 }
 
