@@ -12,30 +12,29 @@ import Firebase
 class Message{
     var fromId: String
     var text: String
-    var timeStamp: String
+    var timeStamp: NSNumber
     var toId: String
 
  
     
-    init(fromId: String, text: String, timeStamp : String, toId: String) {
+    init(fromId: String, text: String, timeStamp : NSNumber, toId: String) {
         self.fromId = fromId
         self.text = text
         self.timeStamp = timeStamp
+       // self.sentAt = Date(timeIntervalSince1970: timeStamp / 1000)
         self.toId = toId
     
-        func chatPartnerId() -> String? {
-            
-            if fromId == Auth.auth().currentUser?.uid {
-                return toId
-            }
-            else{
-               return fromId
-            }
-           
-        }
+//        func chatPartnerId() -> String? {
+//
+//            if fromId == Auth.auth().currentUser?.uid {
+//                return toId
+//            }
+//            else{
+//               return fromId
+//            }
+//
+//        }
         
-        
-   
     }
 }
 

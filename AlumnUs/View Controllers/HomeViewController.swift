@@ -112,7 +112,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let url = URL(string:photoURL),
                     let text = dict["text"] as? String,
                     let timestamp = dict["timestamp"] as? Double {
-                    
+                    print("timestamp",timestamp)
+                    print("dict",dict)
                     if childSnapshot.key != lastPost?.id {
                         let userProfile = UserProfile(uid: uid, username: username, photoURL: url)
                         let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp)
