@@ -32,6 +32,13 @@ class Utilities : UIViewController {
         
     }
     
+    static func styleFilledPostButton (_ button:UIButton){
+        button.backgroundColor = UIColor.init(red: 48/255, green: 99/255, blue: 173/255, alpha: 1)
+        button.layer.cornerRadius = 25.0
+        button.tintColor = UIColor.white
+        
+    }
+    
     static func styleHollowButton(_ button:UIButton){
         button.layer.borderWidth = 2
         button.layer.borderColor = UIColor.black.cgColor

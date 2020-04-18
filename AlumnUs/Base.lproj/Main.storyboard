@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="16096" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15705" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_5" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="16086"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15706"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -310,114 +310,118 @@
                     </view>
                     <tabBarItem key="tabBarItem" title="Item" id="yOo-hT-Cvm"/>
                     <navigationItem key="navigationItem" title="Home" id="q8F-k5-3ys" userLabel="Home">
-                        <barButtonItem key="leftBarButtonItem" title="Log Out" id="JcH-UH-Unm">
+                        <barButtonItem key="leftBarButtonItem" title="Message" image="message" catalog="system" id="KbD-eU-81J">
                             <connections>
-                                <action selector="logOutTapped:" destination="NmQ-UN-mv8" id="ksu-v6-pHY"/>
+                                <action selector="MessageTapped:" destination="NmQ-UN-mv8" id="n4i-JX-uxv"/>
+                                <segue destination="pUR-5r-NeS" kind="show" id="xyt-LM-o8S"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem image="plus.circle.fill" catalog="system" id="Uit-uR-KGX" userLabel="Add">
-                                <color key="tintColor" red="0.4202545097" green="0.69573682550000004" blue="0.50448033930000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <connections>
-                                    <segue destination="GlP-Vx-UPX" kind="presentation" id="vzd-fA-g91"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Message" id="KbD-eU-81J">
-                                <connections>
-                                    <action selector="MessageTapped:" destination="NmQ-UN-mv8" id="n4i-JX-uxv"/>
-                                    <segue destination="pUR-5r-NeS" kind="show" id="xyt-LM-o8S"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Logout" id="Uit-uR-KGX" userLabel="Add">
+                            <color key="tintColor" red="0.4202545097" green="0.69573682550000004" blue="0.50448033930000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            <connections>
+                                <action selector="logoutTapped:" destination="NmQ-UN-mv8" id="rxI-cc-0xl"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="Message" destination="KbD-eU-81J" id="NGk-3a-tSa"/>
-                        <outlet property="logOutButton" destination="JcH-UH-Unm" id="VL5-AC-CLu"/>
+                        <outlet property="logoutButton" destination="Uit-uR-KGX" id="zBk-CS-1pW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="wJS-QK-rru" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="4507.2463768115949" y="-90.401785714285708"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="H13-fg-eB6">
-            <objects>
-                <navigationController id="GlP-Vx-UPX" sceneMemberID="viewController">
-                    <navigationItem key="navigationItem" id="QKl-QH-gsL"/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="T4b-cE-7MA">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="56"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <connections>
-                        <segue destination="X9h-e6-2T5" kind="relationship" relationship="rootViewController" id="T8q-ru-ZPG"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="sdt-m4-RGR" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="5386" y="-96"/>
-        </scene>
         <!--NewPostViewController-->
         <scene sceneID="zG5-lg-9e4">
             <objects>
                 <viewController storyboardIdentifier="NewPostViewController" title="NewPostViewController" id="X9h-e6-2T5" customClass="NewPostViewController" customModule="AlumnUs" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="9J8-2t-iZw">
-                        <rect key="frame" x="0.0" y="0.0" width="414" height="842"/>
+                        <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XOY-jC-4Xa">
-                                <rect key="frame" x="12" y="68" width="390" height="752"/>
-                                <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
-                                <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
-                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                            </textView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's Happening?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJt-wW-prJ" userLabel="Place Holder Label">
-                                <rect key="frame" x="20" y="77" width="321" height="32.666666666666657"/>
-                                <fontDescription key="fontDescription" type="system" weight="medium" pointSize="27"/>
-                                <color key="textColor" red="0.57380741830000004" green="0.56553578380000002" blue="0.0" alpha="0.40908604452054792" colorSpace="custom" customColorSpace="sRGB"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lnY-ha-Vvm">
+                                <rect key="frame" x="12" y="44" width="390" height="769"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's Happening?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJt-wW-prJ" userLabel="Place Holder Label">
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="52"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="27"/>
+                                        <color key="textColor" red="0.57380741830000004" green="0.56553578380000002" blue="0.0" alpha="0.40908604452054792" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XOY-jC-4Xa">
+                                        <rect key="frame" x="0.0" y="52" width="390" height="311"/>
+                                        <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="311" id="272-oo-fGx"/>
+                                        </constraints>
+                                        <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3y7-OB-tmU">
+                                        <rect key="frame" x="0.0" y="363" width="390" height="40"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="40" id="kGO-mF-tIp"/>
+                                        </constraints>
+                                        <state key="normal" title="Add Photos"/>
+                                        <variation key="heightClass=regular-widthClass=compact">
+                                            <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="addPhotosTapped:" destination="X9h-e6-2T5" eventType="touchUpInside" id="y3v-dO-YBI"/>
+                                        </connections>
+                                    </button>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="grX-NE-3kN">
+                                        <rect key="frame" x="0.0" y="403" width="390" height="321"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="320.99999999999994" id="3PV-SV-4nw"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBP-ht-XE7">
+                                        <rect key="frame" x="0.0" y="724" width="390" height="45"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="45" id="qly-nz-U75"/>
+                                        </constraints>
+                                        <state key="normal" title="Post"/>
+                                        <connections>
+                                            <action selector="postButtonTapped:" destination="X9h-e6-2T5" eventType="touchUpInside" id="aqC-Qp-xId"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="12" id="Byc-dd-Dpp"/>
-                            <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="xJt-wW-prJ" secondAttribute="trailing" constant="73" id="Hek-Q3-aIw"/>
-                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" constant="12" id="ITx-hd-86C"/>
-                            <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="XOY-jC-4Xa" secondAttribute="trailing" constant="12" id="Y8X-ds-TXh"/>
-                            <constraint firstItem="xJt-wW-prJ" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" constant="21" id="l0J-vE-I4Q"/>
-                            <constraint firstItem="XOY-jC-4Xa" firstAttribute="bottom" secondItem="Unp-pz-oib" secondAttribute="bottom" constant="12" id="p32-Dc-XzO"/>
-                            <constraint firstItem="xJt-wW-prJ" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="20" id="rEj-Y2-d7Y"/>
+                            <constraint firstItem="lnY-ha-Vvm" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" id="F0I-zM-WyT"/>
+                            <constraint firstItem="Unp-pz-oib" firstAttribute="bottom" secondItem="lnY-ha-Vvm" secondAttribute="bottom" id="T8S-zv-tgu"/>
+                            <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="lnY-ha-Vvm" secondAttribute="trailing" constant="12" id="pgu-OF-8eY"/>
+                            <constraint firstItem="lnY-ha-Vvm" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="12" id="xBM-8Z-unD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="Unp-pz-oib"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Posts" image="square.and.pencil" catalog="system" id="Oqb-Fi-e15"/>
                     <navigationItem key="navigationItem" id="SSB-qf-HbH">
-                        <barButtonItem key="leftBarButtonItem" image="delete.left" catalog="system" id="lJJ-eP-YqQ" userLabel="Cancel Button">
-                            <connections>
-                                <action selector="cancelTapped:" destination="X9h-e6-2T5" id="HKj-9E-Ou6"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" title="Post" id="g8g-6d-eS0">
-                            <connections>
-                                <action selector="postButtonTapped:" destination="X9h-e6-2T5" id="keS-Z8-alT"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="leftBarButtonItem" image="delete.left" catalog="system" id="lJJ-eP-YqQ" userLabel="Cancel Button"/>
+                        <barButtonItem key="rightBarButtonItem" title="Post" id="g8g-6d-eS0"/>
                     </navigationItem>
                     <connections>
-                        <outlet property="cancelButton" destination="lJJ-eP-YqQ" id="lQx-yM-ALr"/>
+                        <outlet property="addPhotoImageView" destination="grX-NE-3kN" id="xKC-h1-0CO"/>
+                        <outlet property="addPhotosButton" destination="3y7-OB-tmU" id="6do-pW-COW"/>
                         <outlet property="placeHolderLabel" destination="xJt-wW-prJ" id="VCx-j7-bGN"/>
-                        <outlet property="postButton" destination="g8g-6d-eS0" id="ubb-cg-aWM"/>
+                        <outlet property="postButton" destination="NBP-ht-XE7" id="UNK-h5-gOI"/>
                         <outlet property="textArea" destination="XOY-jC-4Xa" id="bPj-kJ-zap"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zjP-sO-d5d" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="6186.9565217391309" y="-96.428571428571431"/>
+            <point key="canvasLocation" x="2579.7101449275365" y="636.83035714285711"/>
         </scene>
-        <!--Item-->
+        <!--Home-->
         <scene sceneID="bVF-nu-BDH">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ye0-I9-5a8" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Item" id="FsG-A3-sZb"/>
+                    <tabBarItem key="tabBarItem" title="Home" image="house" catalog="system" id="FsG-A3-sZb"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="UUR-Mj-q1H">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
@@ -444,6 +448,7 @@
                     </tabBar>
                     <connections>
                         <segue destination="ye0-I9-5a8" kind="relationship" relationship="viewControllers" id="f1b-HY-pjP"/>
+                        <segue destination="X9h-e6-2T5" kind="relationship" relationship="viewControllers" id="BAb-Pm-Ww6"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4YB-5p-ek1" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -496,8 +501,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="delete.left" catalog="system" width="128" height="104"/>
-        <image name="plus.circle.fill" catalog="system" width="128" height="121"/>
+        <image name="delete.left" catalog="system" width="64" height="52"/>
+        <image name="house" catalog="system" width="64" height="54"/>
+        <image name="message" catalog="system" width="64" height="56"/>
+        <image name="square.and.pencil" catalog="system" width="64" height="58"/>
         <image name="usericon" width="50" height="50"/>
     </resources>
 </document>

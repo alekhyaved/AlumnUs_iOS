@@ -8,24 +8,16 @@
 import Foundation
 import UIKit
 import Firebase
+import FirebaseAuth
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var logOutButton: UIBarButtonItem!
 //@IBOutlet weak var messageButton: UIBarButtonItem!
     
+   
+    @IBOutlet weak var logoutButton: UIBarButtonItem!
     @IBOutlet weak var Message: UIBarButtonItem!
     //    @IBOutlet weak var MessageButton: UITabBarItem!
-    
-    @IBAction func logOutTapped(_ sender: Any) {
-        try! Auth.auth().signOut()
-               // self.performSegue(withIdentifier: "logOutSegue", sender: self)
-               let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
-               as? ViewController
-               
-               view.window?.rootViewController = mainViewC
-               view.window?.makeKeyAndVisible()
-    }
     
 //    
   
@@ -45,6 +37,17 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 //    }
     
     
+    @IBAction func logoutTapped(_ sender: Any) {
+        try! Auth.auth().signOut()
+        // self.performSegue(withIdentifier: "logOutSegue", sender: self)
+        let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
+        as? ViewController
+        
+        view.window?.rootViewController = mainViewC
+        view.window?.makeKeyAndVisible()
+        
+    }
+    
     
     var tableView:UITableView!
        
@@ -55,6 +58,8 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
        
        override func viewDidLoad() {
            super.viewDidLoad()
+        
+        print("view did load!!")
            tableView = UITableView(frame: view.bounds, style: .plain)
            
            let cellNib = UINib(nibName: "PostTableViewCell", bundle: nil)
@@ -111,11 +116,13 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
                     let photoURL = author["photoURL"] as? String,
                     let url = URL(string:photoURL),
                     let text = dict["text"] as? String,
-                    let timestamp = dict["timestamp"] as? Double {
+                    let timestamp = dict["timestamp"] as? Double,
+                    let addedPhoto = dict["addPhotoURL"] as? String,
+                    let addURL = URL(string: addedPhoto){
                     
                     if childSnapshot.key != lastPost?.id {
                         let userProfile = UserProfile(uid: uid, username: username, photoURL: url)
-                        let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp)
+                        let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp, addedPhotoURL: addURL)
                                         tempPosts.insert(post, at: 0)
                     }
                     

@@ -14,6 +14,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var subTitleLabel: UILabel!
     @IBOutlet weak var postTextLabel: UILabel!
+    @IBOutlet weak var addedImageView: UIImageView!
     
     
     override func awakeFromNib() {
@@ -51,6 +52,18 @@ class PostTableViewCell: UITableViewCell {
         usernameLabel.text = post.author.username
         postTextLabel.text = post.text
         subTitleLabel.text = post.createdAt.calenderTimeSinceNow()
+        
+        self.addedImageView.image = nil
+        imageService.getImage(withURL: post.addedPhotoURL){image, url in
+            guard let _add = self.post else {return}
+            if _add.addedPhotoURL.absoluteString == url.absoluteString{
+                self.addedImageView.image = image
+            }
+            else{
+                //print("image not available")
+                //self.addedImageView.isHidden = true
+            }
+        }
     }
     
 }
