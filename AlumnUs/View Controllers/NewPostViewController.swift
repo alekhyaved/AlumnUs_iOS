@@ -70,17 +70,39 @@ class NewPostViewController: UIViewController, UITextViewDelegate,UIImagePickerC
         dismiss(animated: true, completion: nil)
     }
     
-
-    
     
     @IBAction func postButtonTapped(_ sender: Any) {
+        
          guard let addphoto = addPhotoImageView.image else { return }
         
         self.uploadAddPhotoImage(addphoto){ url in
+            print("my url",url as Any)
             guard let userProfile = UserService.currentUserProfile else {return}
-            
-                let postRef = Database.database().reference().child("posts").childByAutoId()
-                
+                         
+                             let postRef = Database.database().reference().child("posts").childByAutoId()
+            if url != nil{
+                    let postObject = [
+                        "author": [
+                            "uid": userProfile.uid,
+                            "username": userProfile.username,
+                            "photoURL": userProfile.photoURL.absoluteString
+                        ],
+                        
+                        "text" : self.textArea.text!,
+                        "timestamp" : [".sv":"timestamp"],
+                        "addPhotoURL": url?.absoluteString
+                    ] as [String: Any]
+                    
+                    postRef.setValue(postObject, withCompletionBlock: { error, ref in
+                        if error == nil {
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                        else{
+                            //handle error
+                        }
+                    })
+            }
+            else {
                 let postObject = [
                     "author": [
                         "uid": userProfile.uid,
@@ -90,8 +112,8 @@ class NewPostViewController: UIViewController, UITextViewDelegate,UIImagePickerC
                     
                     "text" : self.textArea.text!,
                     "timestamp" : [".sv":"timestamp"],
-                    "addPhotoURL": url?.absoluteString
-                ] as [String: Any]
+                    "addPhotoURL": nil
+                    ] as! [String: Any]
                 
                 postRef.setValue(postObject, withCompletionBlock: { error, ref in
                     if error == nil {
@@ -101,9 +123,14 @@ class NewPostViewController: UIViewController, UITextViewDelegate,UIImagePickerC
                         //handle error
                     }
                 })
-
+            }
         }
         
+//        let movehome =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeviewController)
+//               as? ViewController
+//
+//               view.window?.rootViewController = movehome
+//               view.window?.makeKeyAndVisible()
             
     }
     

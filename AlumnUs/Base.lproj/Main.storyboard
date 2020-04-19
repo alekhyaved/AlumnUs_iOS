@@ -341,26 +341,26 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="lnY-ha-Vvm">
-                                <rect key="frame" x="12" y="44" width="390" height="769"/>
+                                <rect key="frame" x="12" y="114" width="390" height="649"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="What's Happening?" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xJt-wW-prJ" userLabel="Place Holder Label">
-                                        <rect key="frame" x="0.0" y="0.0" width="390" height="52"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="390" height="39"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="27"/>
                                         <color key="textColor" red="0.57380741830000004" green="0.56553578380000002" blue="0.0" alpha="0.40908604452054792" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="XOY-jC-4Xa">
-                                        <rect key="frame" x="0.0" y="52" width="390" height="311"/>
+                                        <rect key="frame" x="0.0" y="39" width="390" height="225"/>
                                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="311" id="272-oo-fGx"/>
+                                            <constraint firstAttribute="height" constant="225" id="272-oo-fGx"/>
                                         </constraints>
                                         <color key="textColor" systemColor="labelColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <fontDescription key="fontDescription" type="system" weight="medium" pointSize="22"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="leading" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3y7-OB-tmU">
-                                        <rect key="frame" x="0.0" y="363" width="390" height="40"/>
+                                        <rect key="frame" x="0.0" y="264" width="390" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="kGO-mF-tIp"/>
                                         </constraints>
@@ -373,13 +373,13 @@
                                         </connections>
                                     </button>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="grX-NE-3kN">
-                                        <rect key="frame" x="0.0" y="403" width="390" height="321"/>
+                                        <rect key="frame" x="0.0" y="304" width="390" height="300"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" constant="320.99999999999994" id="3PV-SV-4nw"/>
+                                            <constraint firstAttribute="height" constant="300" id="3PV-SV-4nw"/>
                                         </constraints>
                                     </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NBP-ht-XE7">
-                                        <rect key="frame" x="0.0" y="724" width="390" height="45"/>
+                                        <rect key="frame" x="0.0" y="604" width="390" height="45"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="45" id="qly-nz-U75"/>
                                         </constraints>
@@ -393,8 +393,8 @@
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
-                            <constraint firstItem="lnY-ha-Vvm" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" id="F0I-zM-WyT"/>
-                            <constraint firstItem="Unp-pz-oib" firstAttribute="bottom" secondItem="lnY-ha-Vvm" secondAttribute="bottom" id="T8S-zv-tgu"/>
+                            <constraint firstItem="lnY-ha-Vvm" firstAttribute="top" secondItem="Unp-pz-oib" secondAttribute="top" constant="70" id="F0I-zM-WyT"/>
+                            <constraint firstItem="Unp-pz-oib" firstAttribute="bottom" secondItem="lnY-ha-Vvm" secondAttribute="bottom" constant="50" id="T8S-zv-tgu"/>
                             <constraint firstItem="Unp-pz-oib" firstAttribute="trailing" secondItem="lnY-ha-Vvm" secondAttribute="trailing" constant="12" id="pgu-OF-8eY"/>
                             <constraint firstItem="lnY-ha-Vvm" firstAttribute="leading" secondItem="Unp-pz-oib" secondAttribute="leading" constant="12" id="xBM-8Z-unD"/>
                         </constraints>

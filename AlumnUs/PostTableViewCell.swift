@@ -59,10 +59,10 @@ class PostTableViewCell: UITableViewCell {
             if _add.addedPhotoURL.absoluteString == url.absoluteString{
                 self.addedImageView.image = image
             }
-            else{
-                //print("image not available")
-                //self.addedImageView.isHidden = true
-            }
+//            else if _add.addedPhotoURL.absoluteString != nil{
+//                //print("image not available")
+//                self.addedImageView.isHidden = true
+//            }
         }
     }
     
