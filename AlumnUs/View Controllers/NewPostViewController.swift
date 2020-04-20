@@ -126,11 +126,14 @@ class NewPostViewController: UIViewController, UITextViewDelegate,UIImagePickerC
             }
         }
         
-//        let movehome =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.homeviewController)
-//               as? ViewController
+//        let alertController = UIAlertController(title: "Posted!!", message: "Your post has been posted successfully!", preferredStyle: .alert)
+//        let action = UIAlertAction(title: "Ok", style: .default)
 //
-//               view.window?.rootViewController = movehome
-//               view.window?.makeKeyAndVisible()
+//        alertController.addAction(action)
+//
+//        self.present(alertController, animated: true, completion: nil)
+        
+        
             
     }
     
@@ -158,6 +161,7 @@ class NewPostViewController: UIViewController, UITextViewDelegate,UIImagePickerC
             }
         }
     }
+    
     
     
 }

@@ -9,13 +9,13 @@ import Foundation
 import UIKit
 import Firebase
 import FirebaseAuth
+import FirebaseDatabase
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
 //@IBOutlet weak var messageButton: UIBarButtonItem!
     
-   
-    @IBOutlet weak var logoutButton: UIBarButtonItem!
+
     @IBOutlet weak var Message: UIBarButtonItem!
     //    @IBOutlet weak var MessageButton: UITabBarItem!
     
@@ -35,18 +35,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 ////        }, withCancel: nil)
 //    
 //    }
-    
-    
-    @IBAction func logoutTapped(_ sender: Any) {
-        try! Auth.auth().signOut()
-        // self.performSegue(withIdentifier: "logOutSegue", sender: self)
-        let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
-        as? ViewController
-        
-        view.window?.rootViewController = mainViewC
-        view.window?.makeKeyAndVisible()
-        
-    }
+
     
     
     var tableView:UITableView!
