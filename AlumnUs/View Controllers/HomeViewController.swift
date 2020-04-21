@@ -8,24 +8,16 @@
 import Foundation
 import UIKit
 import Firebase
+import FirebaseAuth
+import FirebaseDatabase
 
 class HomeViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    @IBOutlet weak var logOutButton: UIBarButtonItem!
 //@IBOutlet weak var messageButton: UIBarButtonItem!
     
+
     @IBOutlet weak var Message: UIBarButtonItem!
     //    @IBOutlet weak var MessageButton: UITabBarItem!
-    
-    @IBAction func logOutTapped(_ sender: Any) {
-        try! Auth.auth().signOut()
-               // self.performSegue(withIdentifier: "logOutSegue", sender: self)
-               let mainViewC =  storyboard?.instantiateViewController(identifier: Constants.Storyboard.mainViewController)
-               as? ViewController
-               
-               view.window?.rootViewController = mainViewC
-               view.window?.makeKeyAndVisible()
-    }
     
 //    
   
@@ -43,7 +35,7 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
 ////        }, withCancel: nil)
 //    
 //    }
-    
+
     
     
     var tableView:UITableView!
@@ -52,9 +44,45 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
         var moreFetching = false
         var reachedEnd = false
     let leadingScreenForBatchhing:CGFloat = 3.0
+    
+    var refreshControl:UIRefreshControl!
+    
+    var postsRef:DatabaseReference{
+        return  Database.database().reference().child("posts")
+    }
        
+    var oldPostsQuery:DatabaseQuery{
+            
+            let lastPost = self.posts.last
+            var queryRef: DatabaseQuery
+            if lastPost == nil{
+                    queryRef = postsRef.queryOrdered(byChild: "timestamp")
+            }
+            else{
+                let lastTimeStamp = lastPost!.createdAt.timeIntervalSince1970 * 1000
+                queryRef = postsRef.queryOrdered(byChild: "timestamp").queryEnding(atValue: lastTimeStamp)
+            }
+        return queryRef
+    }
+    
+    var newPostsQuery:DatabaseQuery{
+            
+        let firstPost = self.posts.first
+            var queryRef: DatabaseQuery
+            if firstPost == nil{
+                    queryRef = postsRef.queryOrdered(byChild: "timestamp")
+            }
+            else{
+                let firstTimeStamp = firstPost!.createdAt.timeIntervalSince1970 * 1000
+                queryRef = postsRef.queryOrdered(byChild: "timestamp").queryStarting(atValue: firstTimeStamp)
+            }
+        return queryRef
+    }
+    
        override func viewDidLoad() {
            super.viewDidLoad()
+        
+        print("view did load!!")
            tableView = UITableView(frame: view.bounds, style: .plain)
            
            let cellNib = UINib(nibName: "PostTableViewCell", bundle: nil)
@@ -80,48 +108,59 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
            tableView.delegate = self
            tableView.dataSource = self
            tableView.reloadData()
+        
+            refreshControl = UIRefreshControl()
+        tableView.refreshControl = refreshControl
+        refreshControl.addTarget(self, action: #selector(handleRefresh), for: .valueChanged)
            
            //observePosts()
             beginBatchFetch()
            
        }
-       
-    func fetchPosts(completion: @escaping(_ posts: [Post])->()) {
-           let postsRef = Database.database().reference().child("posts")
+    
+    @objc func handleRefresh(){
+        print("Refresh!")
         
-        let lastPost = self.posts.last
-        var queryRef: DatabaseQuery
-        if lastPost == nil{
-                queryRef = postsRef.queryOrdered(byChild: "timestamp").queryLimited(toLast: 20)
-        }
-        else{
-            let lastTimeStamp = lastPost!.createdAt.timeIntervalSince1970 * 1000
-            queryRef = postsRef.queryOrdered(byChild: "timestamp").queryEnding(atValue: lastTimeStamp).queryLimited(toLast: 20)
-        }
-           
-        queryRef.observeSingleEvent(of: .value, with: { snapshot in
+        newPostsQuery.queryLimited(toFirst: 20).observeSingleEvent(of: .value, with: { snapshot in
             
             var tempPosts = [Post]()
+            let firstPost = self.posts.first
             for child in snapshot.children {
                 if let childSnapshot = child as? DataSnapshot,
-                    let dict = childSnapshot.value as? [String:Any],
-                    let author = dict["author"] as? [String:Any],
-                    let uid = author["uid"] as? String,
-                    let username = author["username"] as? String,
-                    let photoURL = author["photoURL"] as? String,
-                    let url = URL(string:photoURL),
-                    let text = dict["text"] as? String,
-                    let timestamp = dict["timestamp"] as? Double {
-                    print("timestamp",timestamp)
-                    print("dict",dict)
-                    if childSnapshot.key != lastPost?.id {
-                        let userProfile = UserProfile(uid: uid, username: username, photoURL: url)
-                        let post = Post(id: childSnapshot.key, author: userProfile, text: text, timestamp:timestamp)
-                                        tempPosts.insert(post, at: 0)
+                    let data = childSnapshot.value as? [String:Any],
+                    let post = Post.parse(childSnapshot.key, data),
+                    childSnapshot.key != firstPost?.id {
+                        tempPosts.insert(post, at: 0)
                     }
-                    
-                   
-                }
+            }
+            
+            self.posts.insert(contentsOf: tempPosts, at: 0)
+            self.tableView.reloadData()
+            self.refreshControl.endRefreshing()
+            
+            //return completion(tempPosts)
+            //self.posts = tempPosts
+            //self.tableView.reloadData()
+            
+        })
+    }
+       
+    func fetchPosts(completion: @escaping(_ posts: [Post])->()) {
+        
+           
+        oldPostsQuery.queryLimited(toLast: 20).observeSingleEvent(of: .value, with: { snapshot in
+            
+            var tempPosts = [Post]()
+            let lastPost = self.posts.last
+            for child in snapshot.children {
+                if let childSnapshot = child as? DataSnapshot,
+
+                    let data = childSnapshot.value as? [String:Any],
+                    let post = Post.parse(childSnapshot.key, data),
+                    childSnapshot.key != lastPost?.id {
+                        tempPosts.insert(post, at: 0)
+
+                    }
             }
             
             return completion(tempPosts)
