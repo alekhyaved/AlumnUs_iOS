@@ -2,9 +2,8 @@
 //  ContactsTableViewCell.swift
 //  AlumnUs
 //
-//  Created by Arno Lenin Malyala on 4/13/20.
-//  Copyright © 2020 Juhi Nayak. All rights reserved.
-//
+// Created by Leela Alekhya Vedula on 4/15/20.
+//  Copyright © 2020 Alekhya. All rights reserved.
 
 import UIKit
 

@@ -9,6 +9,7 @@
 import Foundation
 import UIKit
 import FirebaseDatabase
+import FirebaseAuth
 
 
 
@@ -32,14 +33,15 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        performSegue(withIdentifier: "chatSegue", sender: self)
         dismiss(animated: true)
         {
             let contact = self.contacts[indexPath.row]
             print("dismiss completed")
+           
             self.showChatControllerForContact(contact: contact)
         }
     }
+
     
   func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
     let cell = tableView.dequeueReusableCell(withIdentifier: "contactCell", for: indexPath) as! ContactsTableViewCell
@@ -57,12 +59,16 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
     var databaseHandle: DatabaseHandle?
     
     var contacts = [Profile]()
-
+    var messages = [Message]()
+//    var messageDictionary = [String: Message]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
     
         // Do any additional setup after loading the view.
+
+            
+        
         
    tableView = UITableView(frame: view.bounds, style: .plain)
    
@@ -97,44 +103,32 @@ class MessageController: UIViewController, UITableViewDelegate, UITableViewDataS
             var queryRef: DatabaseQuery
             queryRef = profileRef.queryLimited(toLast: 20)
             queryRef.observeSingleEvent(of: .value, with: { snapshot in
-//                var tempContacts = [Profile]()
             for child in snapshot.children {
-              //  print("child", child)
+              print("child", child)
+        
                 if let childSnapshot = child as? DataSnapshot,
+                
                     let dict = childSnapshot.value as? [String:Any],
                     let username = dict["username"] as? String,
                     let id = childSnapshot.key as? String,
                     let photoURL = dict["photoURL"] as? String,
                     let url = URL(string:photoURL){
                     let profile = Profile(username: username, photoURL: url, id: id)
-                    self.contacts.append(profile)
-                    
+                    if id != Auth.auth().currentUser!.uid {
+                         self.contacts.append(profile)
+                    }
+                 
+                    print ("childSnapshot", childSnapshot.key)
                     print("dict", dict)
                     print("id", id)
                     print("key", childSnapshot.key)
-                    
-//                    tempContacts.append(profile)
                 }
 
             }
                 self.tableView.reloadData()
-
                 }
-
             )
-
         }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
 }
 
     

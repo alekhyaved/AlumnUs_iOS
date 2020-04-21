@@ -154,10 +154,12 @@ class HomeViewController: UIViewController, UITableViewDelegate, UITableViewData
             let lastPost = self.posts.last
             for child in snapshot.children {
                 if let childSnapshot = child as? DataSnapshot,
+
                     let data = childSnapshot.value as? [String:Any],
                     let post = Post.parse(childSnapshot.key, data),
                     childSnapshot.key != lastPost?.id {
                         tempPosts.insert(post, at: 0)
+
                     }
             }
             
