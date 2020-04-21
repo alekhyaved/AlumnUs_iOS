@@ -13,7 +13,7 @@ import Firebase
 class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     
-    @IBOutlet weak var sjsuIDTextField: UITextField!
+    //@IBOutlet weak var sjsuIDTextField: UITextField!
     @IBOutlet weak var firstNameTextField: UITextField!
     @IBOutlet weak var lastNameTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
@@ -22,7 +22,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
     @IBOutlet weak var errorLabel: UILabel!
     @IBOutlet weak var profileImageView: UIImageView!
     @IBOutlet weak var tapTochangeProfile: UIButton!
-    @IBOutlet weak var haveAnAccountLabel: UILabel!
+    //@IBOutlet weak var haveAnAccountLabel: UILabel!
     @IBOutlet weak var loginButton: UIButton!
     
      let imagePicker = UIImagePickerController()
@@ -33,26 +33,23 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
 
         // Do any additional setup after loading the view.
          setUpElements()
-        
+        self.errorLabel.alpha = 0
         imagePicker.delegate = self
+        
     }
     
     func setUpElements(){
         errorLabel.alpha = 0
         
-        Utilities.styleTextField(sjsuIDTextField)
-        Utilities.styleTextField(firstNameTextField)
-        Utilities.styleTextField(lastNameTextField)
-        Utilities.styleTextField(emailTextField)
-        Utilities.styleTextField(passwordTextField)
         Utilities.styleFilledButton(signUpButton)
-        Utilities.styleHollowButtonLogin(loginButton)
+      
     }
     
     
     func validateFields() -> String?{
         
-        if sjsuIDTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
+        if
+            //sjsuIDTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             firstNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             lastNameTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
             emailTextField.text?.trimmingCharacters(in: .whitespacesAndNewlines) == "" ||
@@ -125,7 +122,7 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
             self.errorLabel.alpha = 1
             self.errorLabel.textColor = UIColor.brown
         // remove whitespaces from text
-            let sjsuid = sjsuIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
+//            let sjsuid = sjsuIDTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let firstName = firstNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let lastName = lastNameTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
             let email = emailTextField.text!.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -141,7 +138,8 @@ class SignUpViewController: UIViewController, UIImagePickerControllerDelegate, U
                     
                     // load user data into Firebase Database
                     let db = Firestore.firestore()
-                    db.collection("users").addDocument(data: ["SJSUID" : sjsuid, "firstname": firstName, "lastname": lastName, "uid": result!.user.uid]) { (error) in
+                    db.collection("users").addDocument(data: [//"SJSUID" : sjsuid,
+                    "firstname": firstName, "lastname": lastName, "uid": result!.user.uid]) { (error) in
                         if error != nil{
                             self.showError("User entry cannot be created on database.")
                         }
