@@ -2,8 +2,8 @@
 //  ChatCollectionViewCell.swift
 //  AlumnUs
 //
-//  Created by Arno Lenin Malyala on 4/16/20.
-//  Copyright © 2020 Juhi Nayak. All rights reserved.
+//  Created by Leela Alekhya Vedula on 4/14/20.
+//  Copyright © 2020 Alekhya. All rights reserved.
 //
 
 import UIKit
@@ -32,6 +32,8 @@ class ChatCollectionViewCell: UICollectionViewCell {
         return view
     }()
     var bubbleViewWidthAnchor : NSLayoutConstraint?
+    var bubbleViewRightAnchor : NSLayoutConstraint?
+    var bubbleViewLeftAnchor  : NSLayoutConstraint?
     
     override init(frame: CGRect) {
         super.init(frame:frame)
@@ -46,7 +48,15 @@ class ChatCollectionViewCell: UICollectionViewCell {
         
             bubbleViewWidthAnchor = bubbleView.widthAnchor.constraint(equalToConstant: 200)
             bubbleViewWidthAnchor?.isActive = true
-            bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor,constant: -8 ).isActive = true
+        
+        
+            bubbleViewRightAnchor = bubbleView.rightAnchor.constraint(equalTo: self.rightAnchor,constant: -8 )
+            bubbleViewRightAnchor?.isActive = true
+            
+            bubbleViewLeftAnchor = bubbleView.leftAnchor.constraint(equalTo: self.leftAnchor,constant: 8 )
+//            bubbleViewLeftAnchor?.isActive = false
+        
+        
             bubbleView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
            
             bubbleView.heightAnchor.constraint(equalTo: self.heightAnchor).isActive = true

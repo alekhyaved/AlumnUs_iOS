@@ -2,8 +2,8 @@
 //  ChatLogController.swift
 //  AlumnUs
 //
-//  Created by Arno Lenin Malyala on 4/14/20.
-//  Copyright © 2020 Juhi Nayak. All rights reserved.
+//  Created by Leela Alekhya Vedula on 4/14/20.
+//  Copyright © 2020 Alekhya. All rights reserved.
 //
 
 import Foundation
@@ -15,12 +15,11 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
     var contact: Profile? {
         didSet{
             navigationItem.title = contact?.username
-            observeMessages()
+            
+            observeUserMessages()
+        
         }
     }
-    
-
-    
    lazy var inputTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "Enter message..."
@@ -51,15 +50,19 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cellId", for: indexPath) as! ChatCollectionViewCell
         let message = messages[indexPath.item]
         cell.textView.text = message.text
+        print("index path item",indexPath.item)
+        print ("message details",message.fromId, message.toId,message.text)
+  
+        
         if message.fromId == Auth.auth().currentUser?.uid{
             cell.bubbleView.backgroundColor = UIColor.systemBlue
         }
         else {
             cell.bubbleView.backgroundColor = UIColor.gray
+            cell.bubbleViewRightAnchor?.isActive = false
+            cell.bubbleViewLeftAnchor?.isActive = true
+            
         }
-        
-        
-        
 //        cell.bubbleViewWidthAnchor?.constant = 50
         cell.bubbleViewWidthAnchor?.constant = textFrameEstimate(text: message.text).width + 50
         return cell
@@ -107,10 +110,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         sendButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
         sendButton.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
         
-        
-//        let inputTextField = UITextField()
-//        inputTextField.placeholder = "Enter message..."
-//        inputTextField.translatesAutoresizingMaskIntoConstraints = false
+
         containerView.addSubview(inputTextField)
         // adding constraints x,y,w,h
         inputTextField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
@@ -137,7 +137,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         let childRef = ref.childByAutoId()
         let toId = contact!.id
         let fromId = Auth.auth().currentUser!.uid
-        let sentAt:NSNumber =  NSNumber(value: Int(NSDate().timeIntervalSince1970))
+        let sentAt =  NSNumber(value: Int(NSDate().timeIntervalSince1970))
         let values = ["text": inputTextField.text!,"toId": toId, "fromId": fromId, "sentAt": sentAt] as [String : Any]
         childRef.updateChildValues(values) { (error, ref) in
             if error != nil {
@@ -149,108 +149,58 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
             guard let messageId = childRef.key else { return }
             let userMessagesRef = Database.database().reference().child("user-messages").child(fromId).child(messageId)
             userMessagesRef.setValue(1)
+            
+            
+            let recipientMessageRef = Database.database().reference().child("user-messages").child(toId).child(messageId)
+            recipientMessageRef.setValue(1)
              print("message id", messageId)
             print("userMessagesRef", userMessagesRef)
+            print("recipientMessageRef", recipientMessageRef)
             print("message sent")
 
         }
     }
+ 
     
-//    func observeUserMessages() {
-//
-//        guard let uid = Auth.auth().currentUser?.uid else { return }
-//             let userMessageTaggedRef = Database.database().reference().child("user-messages").child(uid)
-//        userMessageTaggedRef.observe(.childAdded, with: { (DataSnapshot) in
-//
-//                  print("DataSnapshot", DataSnapshot)
-//                  let messageTagId = DataSnapshot.key
-//                    let MessageTaggedRef = Database.database().reference().child("messages").child(messageTagId)
-//                  MessageTaggedRef.observeSingleEvent(of: .value, with:{
-//                      (snapshot) in
-//                      //print("Messages snapshot", DataSnapshot)
-//                      print("snapshot",snapshot)
-//                      if let childSnapshot = snapshot as? DataSnapshot,
-//                         let dict = childSnapshot.value as? [String:Any]{
-//
-//                          print("dict", dict);
-//
-//                          let fromId = dict["fromId"] as? String
-//                          let text = dict["text"] as? String
-//                          let timeStamp = dict["timeStamp"] as? NSNumber
-//                          let toId = dict["toId"] as? String
-//                          print("fromId", fromId!)
-//                          print("text", text!)
-//                          print("sentAt", timeStamp )
-//                          print("toId", toId)
-//                        let message = Message(fromId: fromId!, text: text!, timeStamp: timeStamp! , toId: toId!)
-//                        //message.setValuesForKeys(dictionaryWithValues(forKeys: dict))
-//                        //  message.setValuesForKeys(dict)
-//                          print("printing message text", message.text )
-//                          self.messages.append(message)
-//
-//                        if let toId = message.toId {
-//                            self.messageDictionary[toId!] = message
-//                            self.messages = Array (self.messageDictionary.values)
-//                            self.messages.sort (by: { (message1, message2) ->
-//                                Bool in
-//
-//                                return message1.timeStamp.intValue > message2.timeStamp.intValue
-//                            })
-//
-//                            }
-//                    }
-//                          DispatchQueue.main.async(execute: { () -> Void in
-//                               self.collectionView.reloadData()
-//                          })
-//
-//                  }, withCancel: nil)
-//
-//    }, withCancel: nil)
-//
-//    }
-    
-    func observeMessages() {
-     guard let uid = Auth.auth().currentUser?.uid else { return }
-        let userMessageTaggedRef = Database.database().reference().child("user-messages").child(uid)
-        userMessageTaggedRef.observe(.childAdded, with: { (DataSnapshot) in
-            
-            print("DataSnapshot", DataSnapshot)
-            let messageTagId = DataSnapshot.key
-              let MessageTaggedRef = Database.database().reference().child("messages").child(messageTagId)
-            MessageTaggedRef.observeSingleEvent(of: .value, with:{
-                (snapshot) in
-                //print("Messages snapshot", DataSnapshot)
-                print("snapshot",snapshot)
-                if let childSnapshot = snapshot as? DataSnapshot,
-                   let dict = childSnapshot.value as? [String:Any]{
-                        
-                    print("dict", dict);
-                
-                    let fromId = dict["fromId"] as? String
-                    let text = dict["text"] as? String
-                    let timeStamp = dict["timeStamp"] as? NSNumber
-                    let toId = dict["toId"] as? String
-                    print("fromId", fromId!)
-                    print("text", text!)
-                    print("sentAt", timeStamp )
-                    print("toId", toId!)
-                    let message = Message(fromId: fromId!, text: text!, timeStamp: timeStamp! , toId: toId!)
-                  //message.setValuesForKeys(dictionaryWithValues(forKeys: dict))
-                  //  message.setValuesForKeys(dict)
-                    print("printing message text", message.text )
-                    self.messages.append(message)
-                    DispatchQueue.main.async(execute: { () -> Void in
-                         self.collectionView.reloadData()
-                    })
-                }
-            }, withCancel: nil)
-  
-        }, withCancel: nil)
-        
-    }
-        
-    }
-    
-    
+    func observeUserMessages() {
 
+        guard let uid = Auth.auth().currentUser?.uid else { return }
+             let userMessageTaggedRef = Database.database().reference().child("user-messages").child(uid)
+        userMessageTaggedRef.observe(.childAdded, with: { (DataSnapshot) in
+
+                  print("DataSnapshot", DataSnapshot)
+            print("uid", uid)
+                  let messageTagId = DataSnapshot.key
+                    let MessageTaggedRef = Database.database().reference().child("messages").child(messageTagId)
+                  MessageTaggedRef.observeSingleEvent(of: .value, with:{(snapshot) in
+                      //print("Messages snapshot", DataSnapshot)
+                      print("snapshot",snapshot)
+                      if let childSnapshot = snapshot as? DataSnapshot,
+                         let dict = childSnapshot.value as? [String:Any]{
+                        print("messageTagId", messageTagId)
+                          print("dict", dict);
+                        
+                          let fromId = dict["fromId"] as? String
+                          let text = dict["text"] as? String
+                          let sentAt = dict["sentAt"] as? NSNumber
+                          let toId = dict["toId"] as? String
+                        print("toId", self.contact!.id)
+                        let message = Message(fromId: fromId!, text: text!, sentAt: sentAt! , toId: toId!)
+
+                        if message.chatPartnerId() == self.contact?.id {
+                         self.messages.append(message)
+                            print("chatpartnerId messages"	)
+                          DispatchQueue.main.async(execute: { () -> Void in
+                          self.collectionView.reloadData()
+                        })
+
+                        }
+                    }
+                  }, withCancel: nil)
+
+    }, withCancel: nil)
+
+    }
+
+    }
 
