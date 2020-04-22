@@ -10,7 +10,7 @@ import Foundation
 import UIKit
 import Firebase
 
-class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout {
+class ChatLogController: UICollectionViewController, UITextFieldDelegate, UICollectionViewDelegateFlowLayout, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     
     var contact: Profile? {
         didSet{
@@ -56,6 +56,8 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
         if message.fromId == Auth.auth().currentUser?.uid{
             cell.bubbleView.backgroundColor = UIColor.systemBlue
+             cell.bubbleViewLeftAnchor?.isActive = false
+             cell.bubbleViewRightAnchor?.isActive = true
         }
         else {
             cell.bubbleView.backgroundColor = UIColor.gray
@@ -98,6 +100,21 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         containerView.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
         
+        let uploadImageView = UIImageView()
+        uploadImageView.isUserInteractionEnabled = true
+        uploadImageView.image = UIImage(named: "photos_icon")
+  
+        uploadImageView.translatesAutoresizingMaskIntoConstraints = false
+        uploadImageView.addGestureRecognizer(UITapGestureRecognizer (target: self, action: #selector(handleUploadTap)))
+        containerView.addSubview(uploadImageView)
+           // adding constraints to image view x,y,w,h
+        
+        uploadImageView.leftAnchor.constraint(equalTo: containerView.leftAnchor).isActive = true
+        uploadImageView.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
+        uploadImageView.widthAnchor.constraint(equalToConstant: 44).isActive = true
+        uploadImageView.heightAnchor.constraint(equalToConstant: 44).isActive = true
+        
+        
         let sendButton = UIButton(type: .system)
         sendButton.setTitle("Send", for: .normal)
         sendButton.translatesAutoresizingMaskIntoConstraints = false
@@ -113,7 +130,7 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
 
         containerView.addSubview(inputTextField)
         // adding constraints x,y,w,h
-        inputTextField.leftAnchor.constraint(equalTo: containerView.leftAnchor, constant: 8).isActive = true
+        inputTextField.leftAnchor.constraint(equalTo: uploadImageView.rightAnchor, constant: 8).isActive = true
         inputTextField.centerYAnchor.constraint(equalTo: containerView.centerYAnchor).isActive = true
         inputTextField.rightAnchor.constraint(equalTo: sendButton.leftAnchor).isActive = true
         inputTextField.heightAnchor.constraint(equalTo: containerView.heightAnchor).isActive = true
@@ -131,6 +148,28 @@ class ChatLogController: UICollectionViewController, UITextFieldDelegate, UIColl
         
     
     }
+    
+    
+    @objc func handleUploadTap() {
+       
+        print("we tapped upload")
+        
+        let imagePickerController = UIImagePickerController()
+        imagePickerController.allowsEditing = true
+        imagePickerController.delegate = self
+        present(imagePickerController, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+    
+        print("selected an image ")
+    
+    }
+    
+    func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        dismiss(animated: true, completion: nil )
+    }
+    
     
     @objc func handleSend() {
        let ref = Database.database().reference().child("messages")
